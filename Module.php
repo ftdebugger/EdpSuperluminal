@@ -36,17 +36,11 @@ class Module
     public function cache($e)
     {
         $request = $e->getRequest();
-        if ($request instanceof ConsoleRequest ||
-            $request->getQuery()->get('EDPSUPERLUMINAL_CACHE', null) === null) {
+        if ($request instanceof ConsoleRequest || file_exists(ZF_CLASS_CACHE)) {
             return;
         }
 
-        if (file_exists(ZF_CLASS_CACHE)) {
-            $this->reflectClassCache();
-            $code = file_get_contents(ZF_CLASS_CACHE);
-        } else {
-            $code = "<?php\n";
-        }
+        $code = "<?php\n";
 
         $classes = array_merge(get_declared_interfaces(), get_declared_classes());
         foreach ($classes as $class) {
